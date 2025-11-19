@@ -1,0 +1,86 @@
+# Global
+
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+out/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Backend (Fastify / TypeScript)
+
+# TypeScript build output (if output to dist/)
+backend/dist/
+backend/node_modules/
+backend/*.log
+
+# Local TypeScript cache
+backend/tsconfig.tsbuildinfo
+
+# npm lock backup
+backend/package-lock.json.*
+
+# Frontend (React + Vite + Three.js)
+
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+frontend/*.log
+
+# Vite cache
+frontend/.vite/
+
+# VS Code settings
+frontend/.vscode/
+
+# TypeScript build
+frontend/tsconfig.tsbuildinfo
+
+# Docker
+
+# Docker build caches
+**/docker-cache/
+**/.docker-cache/
+
+# Misc
+
+# Coverage output
+coverage/
+
+# Local development tools
+.vscode/
+.idea/
+*.iml
+
+# Parcel / rollup / bundlers 
+.cache/
+rollup.cache
+
+# Assets
+
+# Auto-generated assets
+assets/generated/

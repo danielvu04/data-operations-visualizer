@@ -4,7 +4,7 @@
 Data Operations Visualizer is a real-time dashboard that transforms complex data operations into an intuitive 3D cityscape.  
 Each "building" represents a processing node. Lights, colors, motion, and brightness change dynamically based on live system metrics such as throughput, latency, error rate, and backlog.
 
-Inspired by real-world high-volume workflows (like healthcare claim pipelines, financial transaction flows, and logistics routing), this project makes operational health **instantly understandable** for both managers and engineers.
+Inspired by real-world high-volume workflows (like healthcare claim pipelines, financial transaction flows, and logistics routing), this project makes operational health **understandable** for both managers and engineers.
 
 ---
 
@@ -65,7 +65,7 @@ frontend/ (React + Three.js + Zustand)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - Node.js + Fastify
@@ -92,7 +92,7 @@ frontend/ (React + Three.js + Zustand)
 
 ---
 
-### ▶️ Running Locally (Dev Mode)
+### Running Locally (Dev Mode)
 
 #### Backend
 ```bash

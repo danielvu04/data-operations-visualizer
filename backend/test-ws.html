@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        #status {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #0f0;
+            background: #0a0a0a;
+        }
+        #messages {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #0f0;
+            background: #0a0a0a;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 2px solid #0f0;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Test - Data Operations Visualizer</h1>
+    <div id="status">Connecting...</div>
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <h2>Messages:</h2>
+    <div id="messages"></div>
+
+    <script>
+        let ws = null;
+
+        function addMessage(text) {
+            const messages = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = new Date().toLocaleTimeString() + ': ' + text;
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function updateStatus(status) {
+            document.getElementById('status').textContent = status;
+        }
+
+        function connect() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                addMessage('Already connected');
+                return;
+            }
+
+            updateStatus('Connecting...');
+            ws = new WebSocket('ws://localhost:8080/ws');
+
+            ws.onopen = () => {
+                updateStatus('Connected ✓');
+                addMessage('WebSocket connection opened');
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'nodes') {
+                        addMessage(`Received nodes: ${data.data.length} nodes`);
+                    } else if (data.type === 'metrics.frame.v1') {
+                        addMessage(`Frame: ${data.nodes.length} metrics, ts: ${new Date(data.ts).toLocaleTimeString()}`);
+                        // Log first metric as sample
+                        if (data.nodes.length > 0) {
+                            const first = data.nodes[0];
+                            addMessage(`  Sample: ${first.nodeId} - throughput: ${first.throughputPerMin.toFixed(0)}/min, error: ${(first.errorRate * 100).toFixed(2)}%, latency: ${first.p95LatencyMs}ms`);
+                        }
+                    } else {
+                        addMessage('Received: ' + JSON.stringify(data).substring(0, 100));
+                    }
+                } catch (e) {
+                    addMessage('Received (non-JSON): ' + event.data.substring(0, 100));
+                }
+            };
+
+            ws.onerror = (error) => {
+                updateStatus('Error ✗');
+                addMessage('WebSocket error: ' + error);
+            };
+
+            ws.onclose = () => {
+                updateStatus('Disconnected');
+                addMessage('WebSocket connection closed');
+            };
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        // Auto-connect on load
+        window.onload = () => {
+            connect();
+        };
+    </script>
+</body>
+</html>
+
